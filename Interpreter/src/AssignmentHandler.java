@@ -6,7 +6,7 @@ public class AssignmentHandler {
 
         // Checking the validity of the left operand
         if(!(Runner.ints.containsElement(args[2]) || isNumber(args[2])))
-            throw new RuntimeException("Assignment operation was invalid. '" + args[2] + "' was the problem");
+            throw new RuntimeException("Assignment operation was invalid. '" + args[2] + "' was the problem on line " + (Runner.pc + 1));
 
         int first; // left operand
         if(isNumber(args[2]))
@@ -51,7 +51,7 @@ public class AssignmentHandler {
         Runner.ints.setValue(args[0], value);
     }
 
-    static boolean isNumber(String str){
+    public static boolean isNumber(String str){
         for(char ch : str.toCharArray()){
             if(!(ch <= '9' && ch >= '0'))
                 return false;

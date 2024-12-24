@@ -16,8 +16,8 @@ class RunningState{;
 public class Runner extends RunningState{
     static Variables<Integer> ints = new Variables<>();
 
-    String[] lines; // instructions line as strings
-    String[][] lineArgs; // normalized instructions
+    static String[] lines; // instructions line as strings
+    static String[][] lineArgs; // normalized instructions
 
     Runner(String fileName) throws FileNotFoundException {
         Parser parser = new Parser(fileName);
@@ -30,6 +30,10 @@ public class Runner extends RunningState{
         for(int i = 0; i < lines.length; i++){
             lineArgs[i] = InstructionHandler.normalizeInstruction(lines[i]);
         }
+    }
+
+    public static String[][] getLineArgs(){
+        return lineArgs;
     }
 
     public void run(){
@@ -58,6 +62,9 @@ public class Runner extends RunningState{
         }
         else if(type == Instruction.print){
             PrintHandler.executePrint(args);
+        }
+        else if(type == Instruction.iif){
+            IfStatementHandler.executeIfStatement(args);
         }
     }
 }

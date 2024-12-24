@@ -5,7 +5,8 @@ public class JavaImplementations_Shota{
         boolean answer = true;
         int i = 2; // starting iteration from number 2 up to number n - 1
         while(i < n){
-            if(n % i == 0){ // if at some point, num is divisible my i, then it is not prime
+            int t = n % i;
+            if(t == 0){ // if at some point, num is divisible my i, then it is not prime
                 answer = false;
             }
             i++;

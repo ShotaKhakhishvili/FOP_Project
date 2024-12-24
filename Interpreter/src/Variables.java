@@ -14,13 +14,14 @@ public class Variables<T> {
     public void setValue(String varName, T varValue){
         if(map.containsKey(varName))
             map.put(varName,varValue);
-        throw new RuntimeException("Variable '" + varName + "' is not declared");
+        else
+            throw new RuntimeException("Variable '" + varName + "' is not declared");
     }
 
     public T getValue(String varName){
         if(map.containsKey(varName))
             return map.get(varName);
-
-        throw new RuntimeException("Variable '" + varName + "' is not declared");
+        else
+            throw new RuntimeException("Variable '" + varName + "' is not declared");
     }
 }

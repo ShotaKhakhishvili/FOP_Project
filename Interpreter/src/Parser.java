@@ -16,8 +16,8 @@ public class Parser {
 
     public void readFile() throws FileNotFoundException {
 
-        File file = new File("Interpreter");
-        String absolutePath = file.getAbsolutePath() + "\\src\\" + fileName;
+        File file = new File(fileName);
+        String absolutePath = file.getAbsolutePath();
 
         try (BufferedReader reader = new BufferedReader(new FileReader(absolutePath))) {
             String line;

@@ -6,5 +6,8 @@ public class Main {
 
         parser.readFile();
         parser.printLines();
+        Instruction a = Instruction.assignment;
+        Assignment b = Assignment.add;
+        System.out.println(b);
     }
 }

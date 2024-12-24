@@ -1,3 +1,4 @@
-a = a + 5
-a = a * 4
-a = a % 21
+Dim a as integer
+a = 4
+a = a + 120
+print a

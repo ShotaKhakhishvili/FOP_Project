@@ -16,8 +16,8 @@ public class Parser {
 
     public void readFile() throws FileNotFoundException {
 
-        File file = new File("Interpreter");
-        String absolutePath = file.getAbsolutePath() + "\\src\\" + fileName;
+        File file = new File(fileName);
+        String absolutePath = file.getAbsolutePath();
 
         try (BufferedReader reader = new BufferedReader(new FileReader(absolutePath))) {
             String line;
@@ -43,21 +43,9 @@ public class Parser {
     }
 
     private void evalLines(){
-        List<String> temp = new ArrayList<>();
-        String curr = "";
-        for(char ch : code.toCharArray()){
-            if(ch == ';')
-            {
-                temp.add(curr);
-                curr = "";
-            }else{
-                curr += ch;
-            }
-        }
-
-        lines = new String[temp.size()];
-        for(int i = 0; i < temp.size(); i++)
-            lines[i] = temp.get(i);
+        lines = new String[fileLines.size()];
+        for(int i = 0; i < fileLines.size(); i++)
+            lines[i] = fileLines.get(i);
     }
 
     public String[] getLines(){

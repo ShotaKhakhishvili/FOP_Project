@@ -1,7 +1,6 @@
 import java.util.HashMap;
 import java.util.Map;
-
-public class Variables<T> {
+public class Variables<T>{
     private Map<String,T> map = new HashMap<>();
 
     public void declareVariable(String varName, T varValue){

@@ -22,11 +22,9 @@ public class JavaImplementations_Shota{
 
         while(t2 > 0){
             int t = t2 % 10;
+            reversed = reversed * 10;
             reversed = reversed + t;
             t2 = t2 / 10;
-            if(t2 > 0){
-                reversed = reversed * 10;
-            }
         }
 
         boolean answer = false;

@@ -13,8 +13,5 @@ public class Main {
         ints.setValue("a", 12 + ints.getValue("b"));
         System.out.println(ints.getValue("a"));
         JavaImplementations_Shota implementationsShota = new JavaImplementations_Shota();
-
-        implementationsShota.task5(3);
-        implementationsShota.task6(112211);
     }
 }

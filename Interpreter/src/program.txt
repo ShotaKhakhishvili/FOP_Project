@@ -1,4 +1,4 @@
 Dim a as integer
 a = 4
-a = a + b
+a = a + 120
 print a

@@ -43,21 +43,9 @@ public class Parser {
     }
 
     private void evalLines(){
-        List<String> temp = new ArrayList<>();
-        String curr = "";
-        for(char ch : code.toCharArray()){
-            if(ch == ';')
-            {
-                temp.add(curr);
-                curr = "";
-            }else{
-                curr += ch;
-            }
-        }
-
-        lines = new String[temp.size()];
-        for(int i = 0; i < temp.size(); i++)
-            lines[i] = temp.get(i);
+        lines = new String[fileLines.size()];
+        for(int i = 0; i < fileLines.size(); i++)
+            lines[i] = fileLines.get(i);
     }
 
     public String[] getLines(){

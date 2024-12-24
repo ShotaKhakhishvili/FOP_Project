@@ -1,13 +1,9 @@
 import java.io.FileNotFoundException;
+import java.util.Arrays;
 
 public class Main {
-    public static void main(String[] args) throws FileNotFoundException {
-        Parser parser = new Parser("program.txt");
-
-        parser.readFile();
-        parser.printLines();
-        Instruction a = Instruction.assignment;
-        Assignment b = Assignment.add;
-        System.out.println(b);
+    public static void main(String[] args) throws FileNotFoundException  {
+        Runner runner = new Runner("program.txt");
+        runner.run();
     }
 }

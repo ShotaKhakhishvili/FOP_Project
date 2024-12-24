@@ -1,3 +1,4 @@
-DIM a as Integer
-a = 5
-PRINT a
+Dim a as integer
+a = 4
+a = a + b
+print a

@@ -1,7 +1,7 @@
 public enum Instruction {
-    declaration, assignment, read, print, wwhile, iff
+    declaration, assignment, input, print, wwhile, wend, iif, endif, invalid
 }
 
-enum Assignment{
-    def, add, sub, mult, div, mod
+enum Assignment {
+    def, add, sub, mult, div, mod, invalid
 }

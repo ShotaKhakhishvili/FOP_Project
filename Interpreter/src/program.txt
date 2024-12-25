@@ -1,9 +1,9 @@
 Dim a as integer
 a = 4
-a = a + 120
-if a < 125 then
+a = (a + 120) * 3
+if a > 300 or a = 150 then
 print 5
-if a = 120 then
+if a>125 or a<125 then
 print a
 end if
 print 55

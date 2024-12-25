@@ -1,3 +1,4 @@
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.BiPredicate;
@@ -11,29 +12,17 @@ public class IfStatementHandler {
         put("<>", (o1,o2) -> o1 != o2);
     }};
 
-    public static void executeIfStatement(String[] args){
-        if(args.length != 5 || !args[4].equals("then"))
+    public static void executeIfStatement(String[] args) throws Exception {
+        if(!args[0].equals("if") || !args[args.length - 1].equals("then"))
             invalidIfStatement();
 
-        if(!(Runner.ints.containsElement(args[1]) || AssignmentHandler.isNumber(args[1])))
-            throw new RuntimeException("If statement was invalid. '" + args[1] + "' was the problem on line " + (Runner.pc + 1));
+        String[] expressionArgs = new String[args.length - 2];
 
-        if(!(Runner.ints.containsElement(args[3]) || AssignmentHandler.isNumber(args[3])))
-            throw new RuntimeException("If statement was invalid. '" + args[3] + "' was the problem on line " + (Runner.pc + 1));
+        for(int i = 1; i < args.length - 1; i++){
+            expressionArgs[i-1] = args[i];
+        }
 
-        int first; // left operand
-        if(AssignmentHandler.isNumber(args[1]))
-            first = Integer.parseInt(args[1]);
-        else
-            first = Runner.ints.getValue(args[1]);
-
-        int second;
-        if(AssignmentHandler.isNumber(args[3]))
-            second = Integer.parseInt(args[3]);
-        else
-            second = Runner.ints.getValue(args[3]);
-
-        if(!map.get(args[2]).test(first,second)){
+        if(!ExpressionBoolean.executeExpression(expressionArgs)){
             int ifCounter = 1;
             String[][] lineArgs = Runner.getLineArgs();
             Runner.pc++;

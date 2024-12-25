@@ -1,5 +1,10 @@
-DIM a as Integer
-a = 5
-a = 4 + 5
-PRINT a
-
+Dim a as integer
+a = 4
+a = a + 120
+if a < 125 then
+print 5
+if a = 120 then
+print a
+end if
+print 55
+end if

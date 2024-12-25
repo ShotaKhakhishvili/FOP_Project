@@ -111,30 +111,6 @@ public interface InstructionHandler {
         return supportedOperators.contains(operator);
     }
 
-    static String[] normalizeInstruction(String instruction){
-        instruction = instruction.toLowerCase();
-        List<Character> chars = instruction.chars()  // Stream of int (each char is represented as an int)
-                .mapToObj(c -> (char) c) // Convert each int to Character
-                .collect(Collectors.toList());
-        char last ='0';
-        String newInstruction = "";
-        for(int i=0; i< chars.size(); i++){
-            char curr= chars.get(i);
-            if(mapForSpaces.containsKey(curr)){
-                if(last!=' '){
-                chars.add( chars.indexOf(last),' ');}
-                else if ( chars.get(i+1)!=' ') {
-                    chars.add( i+1,' ');
-                }
-
-            }
-            if(!(last == ' ' && curr == ' '))
-                newInstruction += curr;
-            last = curr;
-        }
-        return newInstruction.split(" ");
-    }
-
     static Instruction decode(String[] args){
         if(args.length == 0)return Instruction.invalid;
 
@@ -149,19 +125,5 @@ public interface InstructionHandler {
         }
 
         return Instruction.assignment;
-    }
-
-    static Assignment decodeAssignment(String[] args){
-        if(args.length == 3){
-            if(args[1].equals("="))return Assignment.def;
-            return Assignment.invalid;
-        }
-        if(args.length == 5){
-            if(mapAss.containsKey(args[3])) return mapAss.get(args[3]);
-            return Assignment.invalid;
-        }
-        return Assignment.invalid;
-        // a = 5
-        // a = b ? c
     }
 }

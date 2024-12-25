@@ -14,12 +14,13 @@ class RunningState{;
 }
 
 public class Runner extends RunningState{
+    static Variables<Boolean> bools = new Variables<>();
     static Variables<Integer> ints = new Variables<>();
 
     static String[] lines; // instructions line as strings
     static String[][] lineArgs; // normalized instructions
 
-    Runner(String fileName) throws FileNotFoundException {
+    Runner(String fileName) throws Exception {
         Parser parser = new Parser(fileName);
 
         parser.readFile();
@@ -28,7 +29,7 @@ public class Runner extends RunningState{
         lineArgs = new String[lines.length][];
 
         for(int i = 0; i < lines.length; i++){
-            lineArgs[i] = InstructionHandler.normalizeInstruction(lines[i]);
+            lineArgs[i] = InstructionHandler.split(lines[i].toLowerCase());
         }
     }
 
@@ -36,14 +37,14 @@ public class Runner extends RunningState{
         return lineArgs;
     }
 
-    public void run(){
+    public void run() throws Exception {
         while(pc < lines.length){
             job();
             pc++;
         }
     }
 
-    private void job(){
+    private void job() throws Exception {
         args = lineArgs[pc];
         type = InstructionHandler.decode(args);
 
@@ -51,11 +52,7 @@ public class Runner extends RunningState{
             throw new RuntimeException("Instruction on line " + (pc + 1) + " is not valid");
 
         if(type == Instruction.assignment){
-            assType = InstructionHandler.decodeAssignment(args);
-            if(assType == Assignment.invalid)
-                throw new RuntimeException("Assignment instruction on line " + (pc + 1) + " is not valid");
-
-            AssignmentHandler.executeAssignment(args, assType);
+            AssignmentHandler.executeAssignment(args);
         }
         else if(type == Instruction.declaration){
             DeclarationHandler.executeDeclaration(args);

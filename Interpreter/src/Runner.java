@@ -15,6 +15,7 @@ class RunningState{;
 
 public class Runner extends RunningState{
     static Variables<Integer> ints = new Variables<>();
+    static Variables<Boolean> bools = new Variables<>();
 
     static String[] lines; // instructions line as strings
     static String[][] lineArgs; // normalized instructions
@@ -36,14 +37,14 @@ public class Runner extends RunningState{
         return lineArgs;
     }
 
-    public void run(){
+    public void run() throws Exception {
         while(pc < lines.length){
             job();
             pc++;
         }
     }
 
-    private void job(){
+    private void job() throws Exception {
         args = lineArgs[pc];
         type = InstructionHandler.decode(args);
 

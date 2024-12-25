@@ -10,9 +10,13 @@ public class IfStatementHandler {
         put("=", (o1,o2) -> o1 == o2);
         put("<>", (o1,o2) -> o1 != o2);
     }};
+    static Map<String, BiPredicate<Boolean,Boolean>> mapB = new HashMap<>(){{
+        put("and", (o1,o2) -> o1 == o2);
+        put("or", (o1,o2) -> o1 || o2);
+    }};
 
-    public static void executeIfStatement(String[] args){
-        if(args.length != 5 || !args[4].equals("then"))
+    public static void executeIfStatement(String[] args) throws Exception {
+        if(args[0] != "if" || args[args.length-1] != "then")
             invalidIfStatement();
 
         if(!(Runner.ints.containsElement(args[1]) || AssignmentHandler.isNumber(args[1])))
@@ -33,7 +37,7 @@ public class IfStatementHandler {
         else
             second = Runner.ints.getValue(args[3]);
 
-        if(!map.get(args[2]).test(first,second)){
+        if(ExpressionBoolean.executeExpression(args)){
             int ifCounter = 1;
             String[][] lineArgs = Runner.getLineArgs();
             Runner.pc++;

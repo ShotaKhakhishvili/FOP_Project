@@ -1,10 +1,9 @@
 Dim a as integer
 a = 4
 a = a + 120
-if a < 125 then
-print 5
-if a = 120 then
 print a
-end if
-print 55
-end if
+dim b as integer
+b = a % 10
+a = a / 12
+print a
+print b

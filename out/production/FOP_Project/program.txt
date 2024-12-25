@@ -1,5 +1,9 @@
-DIM a as Integer
-a = 5
-a = 4 + 5
-PRINT a
-
+Dim a as integer
+a = 4
+a = a + 120
+print a
+dim b as integer
+b = a % 10
+a = a / 12
+print a
+print b

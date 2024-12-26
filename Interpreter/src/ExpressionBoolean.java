@@ -29,12 +29,12 @@ public class ExpressionBoolean {
 
         // Define operator precedence
         Map<String, Integer> precedence = new HashMap<>();
-        precedence.put("or", 1);
-        precedence.put("and", 2);
-        precedence.put("=", 3);
-        precedence.put("<", 3);
-        precedence.put(">", 3);
         precedence.put("<>", 3);
+        precedence.put(">", 3);
+        precedence.put("<", 3);
+        precedence.put("=", 3);
+        precedence.put("and", 2);
+        precedence.put("or", 1);
 
         int i = 0;
         while (i < tokens.length) {

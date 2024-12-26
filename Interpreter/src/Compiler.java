@@ -1,7 +1,8 @@
-import java.util.ArrayDeque;
-import java.util.HashSet;
 import java.util.Queue;
 import java.util.Set;
+import java.util.ArrayDeque;
+import java.util.HashSet;
+
 
 public class Compiler {
     private static Set<Integer> ifs = new HashSet<>();
@@ -14,6 +15,15 @@ public class Compiler {
         String[] args = Runner.lineArgs[RunningState.pc];
         Instruction instruction = InstructionHandler.decode(args);
         switch (instruction){
+            case wend:
+                wends.add(Runner.pc);
+                checkWhileEnd(args);
+                break;
+            case print:
+                checkPrint(args);
+                break;
+            case invalid:
+                throw new CompilationError("Invalid Statement");
             case declaration:
                 checkDeclaration(args);
                 break;
@@ -32,15 +42,6 @@ public class Compiler {
                 whiles.add(Runner.pc);
                 checkWhile(args);
                 break;
-            case wend:
-                wends.add(Runner.pc);
-                checkWhileEnd(args);
-                break;
-            case print:
-                checkPrint(args);
-                break;
-            case invalid:
-                throw new CompilationError("Invalid Statement");
         }
     }
 

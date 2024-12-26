@@ -23,9 +23,9 @@ public class ExpressionInteger {
      *
      * @param tokens The integer expression split into tokens.
      * @return The result of the evaluated expression.
-     * @throws Exception If the expression is invalid.
+     * @throws CompilationError If the expression is invalid.
      */
-    public static int executeExpressionInteger(String[] tokens) throws Exception {
+    public static int executeExpressionInteger(String[] tokens) throws CompilationError {
         Stack<Integer> operandStack = new Stack<>();
         Stack<String> operatorStack = new Stack<>();
 
@@ -51,7 +51,7 @@ public class ExpressionInteger {
                 if (!operatorStack.isEmpty() && operatorStack.peek().equals("(")) {
                     operatorStack.pop(); // Remove "("
                 } else {
-                    throw new Exception("Mismatched parentheses");
+                    throw new CompilationError("Mismatched parentheses");
                 }
                 i++;
             } else if (isOperator(token)) {
@@ -72,13 +72,13 @@ public class ExpressionInteger {
         // Apply remaining operators
         while (!operatorStack.isEmpty()) {
             if (operatorStack.peek().equals("(") || operatorStack.peek().equals(")")) {
-                throw new Exception("Mismatched parentheses");
+                throw new CompilationError("Mismatched parentheses");
             }
             applyTopOperator(operandStack, operatorStack);
         }
 
         if (operandStack.size() != 1) {
-            throw new Exception("Invalid expression");
+            throw new CompilationError("Invalid expression");
         }
 
         return operandStack.pop();
@@ -89,11 +89,11 @@ public class ExpressionInteger {
      *
      * @param operandStack  The stack containing integer operands.
      * @param operatorStack The stack containing operators.
-     * @throws Exception If the operator is unsupported or there are insufficient operands.
+     * @throws CompilationError If the operator is unsupported or there are insufficient operands.
      */
-    private static void applyTopOperator(Stack<Integer> operandStack, Stack<String> operatorStack) throws Exception {
+    private static void applyTopOperator(Stack<Integer> operandStack, Stack<String> operatorStack) throws CompilationError {
         if (operandStack.size() < 2) {
-            throw new Exception("Insufficient operands");
+            throw new CompilationError("Insufficient operands");
         }
         String operator = operatorStack.pop();
         int right = operandStack.pop();
@@ -101,13 +101,13 @@ public class ExpressionInteger {
 
         BiFunction<Integer, Integer, Integer> operation = arithmeticOperators.get(operator);
         if (operation == null) {
-            throw new Exception("Unsupported operator: " + operator);
+            throw new CompilationError("Unsupported operator: " + operator);
         }
         try {
             int result = operation.apply(left, right);
             operandStack.push(result);
         } catch (ArithmeticException e) {
-            throw new Exception(e.getMessage());
+            throw new CompilationError(e.getMessage());
         }
     }
 
@@ -116,16 +116,16 @@ public class ExpressionInteger {
      *
      * @param token The token representing an integer or variable.
      * @return The integer value.
-     * @throws Exception If the token is neither an integer nor a defined variable.
+     * @throws CompilationError If the token is neither an integer nor a defined variable.
      */
-    private static int getIntegerValue(String token) throws Exception {
+    private static int getIntegerValue(String token) throws CompilationError {
         try {
             return Integer.parseInt(token);
         } catch (NumberFormatException e) {
             // Assume it's a variable
-            Integer value = Runner.ints.getValue(token);
+            Integer value = Runner.intStack.peek().getValue(token);
             if (value == null) {
-                throw new Exception("Undefined integer variable: " + token);
+                throw new CompilationError("Undefined integer variable: " + token);
             }
             return value;
         }

@@ -1,11 +1,12 @@
 import java.awt.*;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.Stack;
 import java.util.function.Predicate;
 
 class RunningState{;
-    public static int pc = 0; // current line
-
+    public static Integer pc = 0; // current line
+    public static int active = 0;
     String[] args; // current instruction
     Instruction type; // current instruction type
     Assignment assType; // current assignment type
@@ -14,14 +15,17 @@ class RunningState{;
 }
 
 public class Runner extends RunningState{
-    static Variables<Boolean> bools = new Variables<>();
-    static Variables<Integer> ints = new Variables<>();
+
+    static Stack<Variables<Boolean>> boolStack = new Stack<>();
+    static Stack<Variables<Integer>> intStack = new Stack<>();
 
     static String[] lines; // instructions line as strings
     static String[][] lineArgs; // normalized instructions
 
-    Runner(String fileName) throws Exception {
+    Runner(String fileName) throws CompilationError {
         Parser parser = new Parser(fileName);
+        boolStack.add(new Variables<>());
+        intStack.add(new Variables<>());
 
         parser.readFile();
 
@@ -33,13 +37,29 @@ public class Runner extends RunningState{
         }
     }
 
+    public static void saveVariableToTemp(){
+        Variables<Boolean> newBool = new Variables<>();
+        Variables<Integer> newInteger = new Variables<>();
+
+        newBool.getMap().putAll(boolStack.peek().getMap());
+        newInteger.getMap().putAll(intStack.peek().getMap());
+
+        boolStack.add(newBool);
+        intStack.add(newInteger);
+    }
+
+    public static void loadVariableToTemp(){
+        boolStack.pop();
+        intStack.pop();
+    }
+
     public static String[][] getLineArgs(){
         return lineArgs;
     }
 
-    public void run() throws Exception {
+    public void run() throws CompilationError {
         while(pc < lines.length){
-            job();
+            Compiler.compile();
             pc++;
         }
     }
@@ -62,6 +82,10 @@ public class Runner extends RunningState{
         }
         else if(type == Instruction.iif){
             IfStatementHandler.executeIfStatement(args);
+        }else if(type == Instruction.wwhile){
+            LoopHandler.executeWhileLoop(args);
+        }else if(type == Instruction.wend){
+            LoopHandler.executeWendStatement();
         }
     }
 }

@@ -23,7 +23,7 @@ public class ExpressionBoolean {
      * @param tokens The boolean expression split into tokens.
      * @return The result of the evaluated expression.
      */
-    public static boolean executeExpression(String[] tokens) throws Exception {
+    public static boolean executeExpression(String[] tokens) throws CompilationError {
         Stack<Boolean> operandStack = new Stack<>();
         Stack<String> operatorStack = new Stack<>();
 
@@ -50,7 +50,7 @@ public class ExpressionBoolean {
                 if (!operatorStack.isEmpty() && operatorStack.peek().equals("(")) {
                     operatorStack.pop();
                 } else {
-                    throw new Exception("Mismatched parentheses");
+                    throw new CompilationError("Mismatched parentheses");
                 }
                 i++;
             } else if (isLogicalOperator(token)) {
@@ -63,7 +63,7 @@ public class ExpressionBoolean {
             } else if (isComparisonOperator(token)) {
                 // Expecting a comparison: left operand, operator, right operand
                 if (i == 0 || i == tokens.length - 1) {
-                    throw new Exception("Invalid comparison operator position");
+                    throw new CompilationError("Invalid comparison operator position");
                 }
                 String leftToken = tokens[i - 1];
                 String operator = token;
@@ -89,7 +89,7 @@ public class ExpressionBoolean {
                     i++;
                 } else {
                     // It's a standalone boolean variable
-                    boolean value = Runner.bools.getValue(tokens[i]);
+                    boolean value = Runner.boolStack.peek().getValue(tokens[i]);
                     operandStack.push(value);
                     i++;
                 }
@@ -99,13 +99,13 @@ public class ExpressionBoolean {
         // Apply remaining operators
         while (!operatorStack.isEmpty()) {
             if (operatorStack.peek().equals("(") || operatorStack.peek().equals(")")) {
-                throw new Exception("Mismatched parentheses");
+                throw new CompilationError("Mismatched parentheses");
             }
             applyTopOperator(operandStack, operatorStack);
         }
 
         if (operandStack.size() != 1) {
-            throw new Exception("Invalid expression");
+            throw new CompilationError("Invalid expression");
         }
 
         return operandStack.pop();
@@ -117,9 +117,9 @@ public class ExpressionBoolean {
      * @param operandStack The stack containing boolean operands.
      * @param operatorStack The stack containing operators.
      */
-    private static void applyTopOperator(Stack<Boolean> operandStack, Stack<String> operatorStack) throws Exception {
+    private static void applyTopOperator(Stack<Boolean> operandStack, Stack<String> operatorStack) throws CompilationError {
         if (operandStack.size() < 2) {
-            throw new Exception("Insufficient operands");
+            throw new CompilationError("Insufficient operands");
         }
         String operator = operatorStack.pop();
         boolean right = operandStack.pop();
@@ -127,7 +127,7 @@ public class ExpressionBoolean {
 
         BiPredicate<Boolean, Boolean> operation = logicalOperators.get(operator);
         if (operation == null) {
-            throw new Exception("Unsupported operator: " + operator);
+            throw new CompilationError("Unsupported operator: " + operator);
         }
         boolean result = operation.test(left, right);
         operandStack.push(result);
@@ -141,13 +141,13 @@ public class ExpressionBoolean {
      * @param rightToken The right operand (variable name or integer).
      * @return The result of the comparison.
      */
-    private static boolean evaluateComparison(String leftToken, String operator, String rightToken) throws Exception {
+    private static boolean evaluateComparison(String leftToken, String operator, String rightToken) throws CompilationError {
         Integer leftValue = getIntegerValue(leftToken);
         Integer rightValue = getIntegerValue(rightToken);
 
         BiPredicate<Integer, Integer> compOp = comparisonOperators.get(operator);
         if (compOp == null) {
-            throw new Exception("Unsupported comparison operator: " + operator);
+            throw new CompilationError("Unsupported comparison operator: " + operator);
         }
         return compOp.test(leftValue, rightValue);
     }
@@ -158,14 +158,14 @@ public class ExpressionBoolean {
      * @param token The token representing an integer or variable.
      * @return The integer value.
      */
-    private static Integer getIntegerValue(String token) throws Exception {
+    private static Integer getIntegerValue(String token) throws CompilationError {
         try {
             return Integer.parseInt(token);
         } catch (NumberFormatException e) {
             // Assume it's a variable
-            Integer value = Runner.ints.getValue(token);
+            Integer value = Runner.intStack.peek().getValue(token);
             if (value == null) {
-                throw new Exception("Undefined integer variable: " + token);
+                throw new CompilationError("Undefined integer variable: " + token);
             }
             return value;
         }
@@ -191,17 +191,4 @@ public class ExpressionBoolean {
         return logicalOperators.containsKey(token);
     }
 
-
-    // Example usage
-    public static void main(String[] args) {
-        String expression = "a = 0 and (b = 5 or a = b) and c";
-        String[] tokens = expression.split(" ");
-
-        try {
-            boolean result = executeExpression(tokens);
-            System.out.println("Result: " + result); // Expected: true
-        } catch (Exception e) {
-            System.err.println("Error: " + e.getMessage());
-        }
-    }
 }

@@ -14,7 +14,7 @@ public class Parser {
         this.fileName = fileName;
     }
 
-    public void readFile() throws FileNotFoundException {
+    public void readFile() throws CompilationError {
 
         File file = new File(fileName);
         String absolutePath = file.getAbsolutePath();

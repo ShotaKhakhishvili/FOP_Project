@@ -5,44 +5,56 @@ import java.util.Set;
 
 public class Variables<T>{
     private Map<String,T> map = new HashMap<>();
-    private Set<Character> invalidChars = new HashSet<>(Set.of(
+    private static Set<Character> invalidChars = new HashSet<>(Set.of(
             '@', '#', '%', '^', '&', '*', '(', ')', '-', '+', '=', '{', '}',
             '[', ']', '|', '\\', ':', ';', '"', '\'', '<', '>', ',', '.', '?',
             '/', '~', '`', ' '
     ));
 
     public void declareVariable(String varName, T varValue){
-        if(map.containsKey(varName))
-            throw new RuntimeException("Variable '" + varName + "' is already declared");
-
-        if(!checkValidity(varName))
-            throw new RuntimeException("Illegal variable name declaration on line " + (Runner.pc + 1));
+       if(!LoopHandler.stack.isEmpty()){
+            LoopHandler.stack.peek().getThird().add(varName);
+        }
 
         map.put(varName, varValue);
+    }
+
+    public void deleteVariable(String varName){
+        if(!map.containsKey(varName))
+            throw new RuntimeException("Variable '" + varName + "' is not declared");
+
+        LoopHandler.stack.peek().getThird().remove(varName);
+        map.remove(varName);
     }
 
     public void setValue(String varName, T varValue){
         if(map.containsKey(varName))
             map.put(varName,varValue);
         else
-            throw new RuntimeException("Variable '" + varName + "' is not declared on line " + (Runner.pc + 1));
+            System.out.println("error");
     }
 
-    public T getValue(String varName){
+    public T getValue(String varName) throws CompilationError {
+        if(varName == null)
+            throw new RuntimeException("Variable '" + varName + "' is null");
         if(map.containsKey(varName)) {
             if(map.get(varName) == null)
-                throw new RuntimeException("Variable '" + varName + "' is null on line " + (Runner.pc + 1));
+                throw new RuntimeException("Variable '" + varName + "' is null");
             return map.get(varName);
         }
         else
-            throw new RuntimeException("Variable '" + varName + "' is not declared on line " + (Runner.pc + 1));
+            throw new CompilationError("Variable '" + varName + "' is not declared");
     }
 
     public boolean containsElement(String varName){
         return map.containsKey(varName);
     }
 
-    public boolean checkValidity(String varName){
+    public Map<String, T> getMap() {
+        return map;
+    }
+
+    public static boolean checkValidity(String varName){
         if(varName.charAt(0) <= '9' && varName.charAt(0) >= '0') return false;
 
         for(char ch : varName.toCharArray()){

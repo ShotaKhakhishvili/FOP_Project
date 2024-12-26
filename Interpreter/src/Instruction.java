@@ -1,5 +1,5 @@
 public enum Instruction {
-    declaration, assignment, input, print, wwhile, wend, iif, endif, invalid
+    declaration, assignment, input, print, wwhile, wend, iif, endif, invalid, empty
 }
 
 enum Assignment {

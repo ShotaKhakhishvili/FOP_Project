@@ -1,10 +1,15 @@
-Dim a as integer
-a = 4
-a = (a + 120) * 3
-if a > 300 or a = 150 then
-print 5
-if a>125 or a<125 then
-print a
-end if
-print 55
-end if
+dim n as integer
+n = 100000
+dim answer as integer
+answer = 1
+dim i as integer
+i = 2
+while i < n
+    dim t as integer
+    t = n % i
+    if t = 0 then
+        answer = 0
+    end if
+    i = i + 1
+wend
+print answer

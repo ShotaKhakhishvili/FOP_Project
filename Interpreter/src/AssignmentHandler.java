@@ -1,14 +1,12 @@
 public class AssignmentHandler {
-    static void executeAssignment(String[] args) throws Exception {
+    static void executeAssignment(String[] args) throws CompilationError {
         String[] expressionArgs = new String[args.length - 2];
-
-        // a = a + 120
 
         for(int i = 2; i < args.length; i++){
             expressionArgs[i-2] = args[i];
         }
 
-        Runner.ints.setValue(args[0], ExpressionInteger.executeExpressionInteger(expressionArgs));
+        Runner.intStack.peek().setValue(args[0], ExpressionInteger.executeExpressionInteger(expressionArgs));
     }
 
     public static boolean isNumber(String str){

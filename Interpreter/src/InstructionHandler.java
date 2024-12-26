@@ -38,7 +38,7 @@ public interface InstructionHandler {
             '/', '~', '`', ' '
     ));
 
-    public static String[] split(String args) throws Exception {
+    public static String[] split(String args) throws CompilationError {
         List<String> tokens = new ArrayList<>();
         StringBuilder sb = new StringBuilder();
         int i = 0;
@@ -76,7 +76,7 @@ public interface InstructionHandler {
                 // Check if the operator is supported
                 String operator = String.valueOf(c);
                 if (!isSupportedOperator(operator)) {
-                    throw new Exception("Illegal character encountered: " + c);
+                    throw new CompilationError("Illegal character encountered: " + c);
                 }
 
                 tokens.add(operator);
@@ -112,7 +112,7 @@ public interface InstructionHandler {
     }
 
     static Instruction decode(String[] args){
-        if(args.length == 0)return Instruction.invalid;
+        if(args.length == 0)return Instruction.empty;
 
         if(map.containsKey(args[0]))
             return map.get(args[0]);

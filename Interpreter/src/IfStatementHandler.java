@@ -5,17 +5,8 @@ import java.util.function.BiPredicate;
 import java.util.function.Predicate;
 
 public class IfStatementHandler {
-    static Map<String, BiPredicate<Integer,Integer>> map = new HashMap<>(){{
-        put("<", (o1,o2) -> o1 < o2);
-        put(">", (o1,o2) -> o1 > o2);
-        put("=", (o1,o2) -> o1 == o2);
-        put("<>", (o1,o2) -> o1 != o2);
-    }};
 
-    public static void executeIfStatement(String[] args) throws Exception {
-        if(!args[0].equals("if") || !args[args.length - 1].equals("then"))
-            invalidIfStatement();
-
+    public static void executeIfStatement(String[] args) throws CompilationError {
         String[] expressionArgs = new String[args.length - 2];
 
         for(int i = 1; i < args.length - 1; i++){
@@ -26,7 +17,11 @@ public class IfStatementHandler {
             int ifCounter = 1;
             String[][] lineArgs = Runner.getLineArgs();
             Runner.pc++;
+
+            Runner.saveVariableToTemp();
+
             while(ifCounter > 0){
+                Compiler.compile();
                 Instruction currentInstruction = InstructionHandler.decode(lineArgs[RunningState.pc]);
                 if(currentInstruction == Instruction.endif)
                     ifCounter--;
@@ -34,11 +29,10 @@ public class IfStatementHandler {
                     ifCounter++;
                 Runner.pc++;
             }
+
+            Runner.loadVariableToTemp();
+
             Runner.pc--;
         }
-    }
-
-    private static void invalidIfStatement(){
-        throw new RuntimeException("If statement on line " + (Runner.pc + 1) + " is not valid");
     }
 }

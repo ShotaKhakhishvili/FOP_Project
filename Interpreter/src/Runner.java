@@ -1,91 +1,182 @@
-import java.awt.*;
-import java.io.FileNotFoundException;
-import java.util.ArrayList;
 import java.util.Stack;
-import java.util.function.Predicate;
 
-class RunningState{;
+/**
+ * RunningState class represents the state of the program during execution.
+ * It holds information about the current program counter (pc), the active state,
+ * the current instruction being executed, and the type of assignment.
+ */
+class RunningState{
     public static Integer pc = 0; // current line
-    public static int active = 0;
     String[] args; // current instruction
     Instruction type; // current instruction type
-    Assignment assType; // current assignment type
-
-
 }
 
 public class Runner extends RunningState{
+    // Stack to hold Variables of Boolean type, managing the state of boolean variables in a Last In, First Out (LIFO) order.
+        static Stack<Variables<Boolean>> boolStack = new Stack<>();
 
-    static Stack<Variables<Boolean>> boolStack = new Stack<>();
-    static Stack<Variables<Integer>> intStack = new Stack<>();
+    // Stack to hold Variables of Integer type, managing the state of integer variables in a Last In, First Out (LIFO) order.
+        static Stack<Variables<Integer>> intStack = new Stack<>();
 
-    static String[] lines; // instructions line as strings
-    static String[][] lineArgs; // normalized instructions
+    // Array to hold the lines of code or instructions for the program. Each element represents a line.
+        static String[] lines;
 
+    // 2D array to hold the arguments for each line of code or instruction. Each row corresponds to a line and holds its associated arguments.
+        static String[][] lineArgs;
+
+    /**
+     * Constructor for the Runner class that initializes the necessary components
+     * for parsing and processing a given source file.
+     *
+     * @param fileName The name of the source file to be parsed.
+     * @throws CompilationError If there is an error during compilation or parsing of the file.
+     */
     Runner(String fileName) throws CompilationError {
+        // Create a new Parser instance to read and process the given file.
         Parser parser = new Parser(fileName);
+
+        // Initialize the boolean and integer stacks with empty Variables objects.
+        // These stacks are used to manage the state of boolean and integer variables.
         boolStack.add(new Variables<>());
         intStack.add(new Variables<>());
 
+        // Read the contents of the file using the parser.
         parser.readFile();
 
+        // Retrieve the lines of code from the parsed file.
         lines = parser.getLines();
+
+        // Initialize the lineArgs array to hold arguments for each line in the file.
+        // The size of the array matches the number of lines in the file.
         lineArgs = new String[lines.length][];
 
+        // Loop through each line, split the line into arguments, and store them in the lineArgs array.
         for(int i = 0; i < lines.length; i++){
+            // Convert the line to lowercase and split it into arguments using InstructionHandler.
             lineArgs[i] = InstructionHandler.split(lines[i].toLowerCase());
         }
     }
 
-    public static void saveVariableToTemp(){
-        Variables<Boolean> newBool = new Variables<>();
-        Variables<Integer> newInteger = new Variables<>();
-
-        newBool.getMap().putAll(boolStack.peek().getMap());
-        newInteger.getMap().putAll(intStack.peek().getMap());
-
-        boolStack.add(newBool);
-        intStack.add(newInteger);
-    }
-
-    public static void loadVariableToTemp(){
-        boolStack.pop();
-        intStack.pop();
-    }
-
-    public static String[][] getLineArgs(){
-        return lineArgs;
-    }
-
+    /**
+     * Executes the compilation process by iterating through each line of code
+     * and invoking the compiler for each line.
+     * The method continuously compiles the code while the program counter (pc)
+     * is less than the total number of lines.
+     *
+     * @throws CompilationError If an error occurs during the compilation process.
+     */
     public void run() throws CompilationError {
+        // Continue compiling each line of code until all lines have been processed
         while(pc < lines.length){
             Compiler.compile();
             pc++;
         }
     }
 
+    /**
+     * Retrieves the 2D array of arguments for each line of code or instruction.
+     * This method returns the `lineArgs` array, which holds the arguments
+     * for each line in the source file, where each row corresponds to a
+     * line of code and each column holds its respective argument.
+     *
+     * @return A 2D array of strings representing the arguments for each line of code.
+     */
+    public static String[][] getLineArgs(){
+        return lineArgs;
+    }
+
+
+    /**
+     * Executes the appropriate handler based on the decoded instruction type.
+     * The method first decodes the instruction from the current line, then checks
+     * its validity. Based on the instruction type, it calls the relevant handler
+     * to execute the corresponding operation.
+     *
+     * @throws Exception If any error occurs during the execution of an instruction.
+     */
     private void job() throws Exception {
+
+        // Retrieve the arguments for the current line of code (instruction)
         args = lineArgs[pc];
+
+        // Decode the instruction to determine its type
         type = InstructionHandler.decode(args);
 
+        // Check if the decoded instruction is invalid and throw an exception if so
         if(type == Instruction.invalid)
             throw new RuntimeException("Instruction on line " + (pc + 1) + " is not valid");
 
-        if(type == Instruction.assignment){
-            AssignmentHandler.executeAssignment(args);
-        }
-        else if(type == Instruction.declaration){
-            DeclarationHandler.executeDeclaration(args);
-        }
-        else if(type == Instruction.print){
-            PrintHandler.executePrint(args);
-        }
-        else if(type == Instruction.iif){
-            IfStatementHandler.executeIfStatement(args);
-        }else if(type == Instruction.wwhile){
-            LoopHandler.executeWhileLoop(args);
-        }else if(type == Instruction.wend){
-            LoopHandler.executeWendStatement();
+
+        // Use a switch statement to handle the instruction based on its type
+        switch (type) {
+            // Handle assignment instructions
+            case assignment:
+                AssignmentHandler.executeAssignment(args);
+                break;
+
+            // Handle declaration instructions
+            case declaration:
+                DeclarationHandler.executeDeclaration(args);
+                break;
+
+            // Handle print instructions
+            case print:
+                PrintHandler.executePrint(args);
+                break;
+
+            // Handle 'if' statement instructions
+            case iif:
+                IfStatementHandler.executeIfStatement(args);
+                break;
+
+            // Handle while loop instructions
+            case wwhile:
+                LoopHandler.executeWhileLoop(args);
+                break;
+
+            // Handle 'wend' (end of loop) instructions
+            case wend:
+                LoopHandler.executeWendStatement();
+                break;
         }
     }
+
+    /**
+     * Removes the most recent Variables objects from both the boolean and integer stacks.
+     * This method effectively discards the topmost state of the boolean and integer variables,
+     * which were saved temporarily in the `saveVariableToTemp` method.
+     */
+
+    public static void loadVariableToTemp(){
+        // Remove the most recent Variables object from the boolean stack.
+        boolStack.pop();
+
+        // Remove the most recent Variables object from the integer stack.
+        intStack.pop();
+    }
+
+    /**
+     * Saves the current state of boolean and integer variables to temporary stacks.
+     * This method creates new `Variables` objects for both booleans and integers,
+     * copies the current maps of variables from the top of the respective stacks,
+     * and then pushes the new `Variables` objects onto the stacks.
+     */
+    public static void saveVariableToTemp(){
+
+        // Create new Variables objects for booleans and integers to hold temporary data
+        Variables<Boolean> newBool = new Variables<>();
+        Variables<Integer> newInteger = new Variables<>();
+
+        // Copy the current boolean variables from the top of the boolean stack into the new object
+        newBool.getMap().putAll(boolStack.peek().getMap());
+
+        // Copy the current integer variables from the top of the integer stack into the new object
+        newInteger.getMap().putAll(intStack.peek().getMap());
+
+        // Push the newly created Variables objects onto their respective stacks
+        boolStack.add(newBool);
+        intStack.add(newInteger);
+    }
+
+
 }

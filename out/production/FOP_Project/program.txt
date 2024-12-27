@@ -1,5 +1,5 @@
 dim n as integer
-n = 100000
+n = 10000
 dim answer as integer
 answer = 1
 dim i as integer

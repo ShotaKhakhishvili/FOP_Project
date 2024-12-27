@@ -1,5 +1,5 @@
-import java.io.*;
 import java.util.ArrayList;
+import java.io.*;
 import java.util.List;
 import java.util.Scanner;
 
@@ -10,7 +10,6 @@ import java.util.Scanner;
  * It reads the file and stores its content in a single string,
  * {@code code} and an array of lines {@code lines}.
  */
-
 public class Parser{
 
     //List to store lines read from the file
@@ -76,7 +75,7 @@ public class Parser{
     }
 
 
-    
+
     /**
      * Combines all the non-empty lines from the file into one string,
      * adding a semicolon at the end of each line.
@@ -129,8 +128,5 @@ public class Parser{
     /**
      * Prints all the processed lines to the console.
      */
-
-
-
 
 }

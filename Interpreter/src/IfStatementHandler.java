@@ -1,6 +1,4 @@
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.function.BiPredicate;
 import java.util.function.Predicate;
 
@@ -12,6 +10,8 @@ public class IfStatementHandler {
         for(int i = 1; i < args.length - 1; i++){
             expressionArgs[i-1] = args[i];
         }
+
+//        LoopHandler.stack.add(new Triple<>(Runner.pc, expressionArgs, new ArrayList<String>()));
 
         if(!ExpressionBoolean.executeExpression(expressionArgs)){
             int ifCounter = 1;
@@ -37,6 +37,10 @@ public class IfStatementHandler {
     }
 
     public static void executeEndIf(){
+        Triple<Integer,String[], List<String>> current = LoopHandler.stack.pop();
 
+        while(!current.getThird().isEmpty()){
+            Runner.intStack.peek().deleteVariable(current.getThird().get(0));
+        }
     }
 }

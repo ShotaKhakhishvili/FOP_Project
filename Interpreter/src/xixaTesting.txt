@@ -1,0 +1,15 @@
+dim n as integer
+n = 100000
+dim answer as integer
+answer = 1
+dim i as integer
+i = 2
+while i < n
+    dim t as integer
+    t = n % i
+    if t = 0 then
+        answer = 0
+    end if
+    i = i + 1
+wend
+print answer

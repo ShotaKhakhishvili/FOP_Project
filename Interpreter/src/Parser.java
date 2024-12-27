@@ -10,7 +10,8 @@ import java.util.Scanner;
  * It reads the file and stores its content in a single string,
  * {@code code} and an array of lines {@code lines}.
  */
-public class Parser {
+
+public class Parser{
 
     //List to store lines read from the file
     private List<String> fileLines = new ArrayList<>();
@@ -19,30 +20,30 @@ public class Parser {
     private String[] lines;
 
     //We combine lines into one string
-    private String code = "";
+    private String code = "" ;
 
     //Name of the file to be parsed - fileName
-    private String fileName;
+    private String fileName ;
 
 
-
-/**
- * Constructs a {@code Parser} instance with the given file name.
- * @param fileName the name of the file to be parsed
- */
+    /**
+     * Constructs a {@code Parser} instance with the given file name.
+     * @param fileName the name of the file to be parsed
+     */
     Parser(String fileName){
         this.fileName = fileName;
     }
 
 
 
-/**
+    /**
  * Reads the file specified by {@code fileName} and processes its content.
  * Stores each line in a list and prepares the file for further evaluation.
  *
  * @throws CompilationError if an error occurs during file reading or processing
  */
-    public void readFile() throws CompilationError {
+
+    public void readFile() throws CompilationError{
         File file = new File(fileName);
         String absolutePath = file.getAbsolutePath();
 
@@ -62,7 +63,7 @@ public class Parser {
         } catch (IOException e) {
             // Handle errors that occur while reading the file
             System.out.println("An error occurred while reading the file: " + e.getMessage());
-        }
+    }
 
         // Process the content into a single code string
         calcCode();
@@ -90,10 +91,10 @@ public class Parser {
      * Combines all the non-empty lines from the file into one string,
      * adding a semicolon at the end of each line.
      */
-    private void calcCode(){
-        for(String str : fileLines){
+    private void calcCode() {
+        for (String str : fileLines) {
             String s = str.trim(); // Remove leading/trailing spaces
-            if(!s.isEmpty())
+            if (!s.isEmpty())
                 code += str + ";"; // Add a semicolon to the end of each non-empty line
         }
     }
@@ -119,11 +120,15 @@ public class Parser {
     }
 
 
+
     /**
      * Prints all the processed lines to the console.
      */
+
     public void printLines(){
         for(String line : lines)
             System.out.println(line);
     }
+
+
 }

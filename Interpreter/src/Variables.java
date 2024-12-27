@@ -5,11 +5,6 @@ import java.util.Set;
 
 public class Variables<T>{
     private Map<String,T> map = new HashMap<>();
-    private static Set<Character> invalidChars = new HashSet<>(Set.of(
-            '@', '#', '%', '^', '&', '*', '(', ')', '-', '+', '=', '{', '}',
-            '[', ']', '|', '\\', ':', ';', '"', '\'', '<', '>', ',', '.', '?',
-            '/', '~', '`', ' '
-    ));
 
     public void declareVariable(String varName, T varValue){
        if(!LoopHandler.stack.isEmpty()){
@@ -58,7 +53,7 @@ public class Variables<T>{
         if(varName.charAt(0) <= '9' && varName.charAt(0) >= '0') return false;
 
         for(char ch : varName.toCharArray()){
-            if(invalidChars.contains(ch))return false;
+            if(InstructionHandler.invalidChars.contains(ch))return false;
         }
 
         return true;

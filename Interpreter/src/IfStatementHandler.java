@@ -2,23 +2,40 @@ import java.util.*;
 import java.util.function.BiPredicate;
 import java.util.function.Predicate;
 
-public class IfStatementHandler {
-
+/**
+ * Handles IF statements in the BASIC interpreter.
+ */
+    public class IfStatementHandler {
+        /**
+     * Executes IF statement.
+     * Evaluates the condition and skips the block of code if the condition is false.
+     *
+     * @param args the arguments of the IF statement, including the condition and instructions.
+     * @throws CompilationError if there is an error during execution.
+     */
     public static void executeIfStatement(String[] args) throws CompilationError {
+
+        // Extract the condition part of the IF statement from the arguments
         String[] expressionArgs = new String[args.length - 2];
 
-        for(int i = 1; i < args.length - 1; i++){
+        // Copy the condition arguments, skipping the IF keyword and the END keyword
+        for (int i = 1; i < args.length - 1; i++){
             expressionArgs[i-1] = args[i];
         }
 
-//        LoopHandler.stack.add(new Triple<>(Runner.pc, expressionArgs, new ArrayList<String>()));
+        // LoopHandler.stack.add(new Triple<>(Runner.pc, expressionArgs, new ArrayList<String>()));
 
-        if(!ExpressionBoolean.executeExpression(expressionArgs)){
-            int ifCounter = 1;
+        // Check the condition of the IF statement
+        if (!ExpressionBoolean.executeExpression(expressionArgs)) {
+            int ifCounter = 1; // Tracks nested IF statements
             String[][] lineArgs = Runner.getLineArgs();
-            Runner.pc++;
+            Runner.pc++; // Move to the next instruction;
 
+
+            // Temporarily save variables for later use
             Runner.saveVariableToTemp();
+
+
 
             while(ifCounter > 0){
                 Compiler.compile();

@@ -128,7 +128,7 @@ public class Parser{
     }
 
 
-    
+
     /**
      * getter...
      * Returns the lines from the file as an array.

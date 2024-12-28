@@ -26,11 +26,12 @@ public class Runner{
         static String[][] lineArgs;
 
     /**
-     * Constructor for the Runner class that initializes the necessary components
-     * for parsing and processing a given source file.
+     * Declares and initializes the necessary resources and structures required for parsing and
+     * processing a file containing code or instructions.
      *
-     * @param fileName The name of the source file to be parsed.
-     * @throws CompilationError If there is an error during compilation or parsing of the file.
+     * @param fileName The name of the file to be processed.
+     * @throws CompilationError     If a compilation error occurs during file processing.
+     * @throws URISyntaxException   If the file path syntax is invalid.
      */
     public static void Declare(String fileName) throws CompilationError, URISyntaxException {
         pc = 0;
@@ -96,12 +97,13 @@ public class Runner{
 
 
     /**
-     * Executes the appropriate handler based on the decoded instruction type.
-     * The method first decodes the instruction from the current line, then checks
-     * its validity. Based on the instruction type, it calls the relevant handler
-     * to execute the corresponding operation.
+     * Processes the current line of code by decoding its instruction type
+     * and executing the corresponding operation. This method handles
+     * various instruction types such as assignments, declarations, print
+     * statements, conditional statements, and loops.
      *
-     * @throws Exception If any error occurs during the execution of an instruction.
+     * @throws Exception If an error occurs during instruction execution or
+     *                   if the instruction is invalid.
      */
     private void job() throws Exception {
 
@@ -155,7 +157,6 @@ public class Runner{
      * This method effectively discards the topmost state of the boolean and integer variables,
      * which were saved temporarily in the `saveVariableToTemp` method.
      */
-
     public static void loadVariableToTemp(){
         // Remove the most recent Variables object from the boolean stack.
         boolStack.pop();
@@ -165,10 +166,9 @@ public class Runner{
     }
 
     /**
-     * Saves the current state of boolean and integer variables to temporary stacks.
-     * This method creates new `Variables` objects for both booleans and integers,
-     * copies the current maps of variables from the top of the respective stacks,
-     * and then pushes the new `Variables` objects onto the stacks.
+     * Saves the current state of boolean and integer variables to temporary storage
+     * by creating new `Variables` objects and copying the current variables from
+     * the top of their respective stacks. The new objects are then pushed onto the stacks.
      */
     public static void saveVariableToTemp(){
 

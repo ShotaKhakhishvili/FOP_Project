@@ -16,7 +16,11 @@ public class AssignmentHandler {
         }
 
         // Evaluate the expression and assign the result to the variable identified by args[0]
-        Runner.intStack.peek().setValue(args[0], ExpressionInteger.executeExpressionInteger(expressionArgs));
+        try {
+            Runner.intStack.peek().setValue(args[0], ExpressionInteger.executeExpressionInteger(expressionArgs));
+        }catch (CompilationError e){
+            Runner.boolStack.peek().setValue(args[0], ExpressionBoolean.executeExpression(expressionArgs));
+        }
     }
 
     /**

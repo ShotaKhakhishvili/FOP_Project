@@ -7,7 +7,10 @@ public class DeclarationHandler {
      */
     public static void executeDeclaration(String[] args) {
         // Declares a variable in the current scope with a default value of null
-        Runner.intStack.peek().declareVariable(args[1], null);
+        if(args[3].equals("integer"))
+            Runner.intStack.peek().declareVariable(args[1], 0);
+        else
+            Runner.boolStack.peek().declareVariable(args[1], false);
     }
 
 }

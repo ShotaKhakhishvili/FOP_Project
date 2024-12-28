@@ -1,7 +1,4 @@
-import java.util.Queue;
-import java.util.Set;
-import java.util.ArrayDeque;
-import java.util.HashSet;
+import java.util.*;
 
 public class Compiler {
 
@@ -17,7 +14,7 @@ public class Compiler {
     // Main method for compiling a single line of code
     public static void compile() throws CompilationError {
         // Retrieve the current line's arguments
-        String[] args = Runner.lineArgs[RunningState.pc];
+        String[] args = Runner.lineArgs[Runner.pc];
         // Decode the instruction from the arguments
         Instruction instruction = InstructionHandler.decode(args);
 
@@ -50,6 +47,9 @@ public class Compiler {
                 whiles.add(Runner.pc); // Record "while" position
                 validateWhile(args); // Validate the "while" statement
                 break;
+            case input:
+                validateInput(args);
+                break;
         }
     }
 
@@ -61,13 +61,13 @@ public class Compiler {
         }
 
         // Check if the variable is already declared in the current scope
-        if (Runner.intStack.peek().containsElement(args[1])) {
-            throw new CompilationError("Duplicate Variable Declaration On Line:");
+        if (Runner.intStack.peek().containsElement(args[1]) || Runner.boolStack.peek().containsElement(args[1])) {
+            throw new CompilationError("Duplicate Variable Declaration");
         }
 
         // Ensure the variable name is valid
         if (!Variables.checkValidity(args[1])) {
-            throw new CompilationError("Illegal Variable Name On Line:");
+            throw new CompilationError("Illegal Variable Name");
         }
 
         // Execute the declaration using the handler
@@ -81,13 +81,13 @@ public class Compiler {
     // Ensures an assignment statement is valid
     private static void validateAssignment(String[] args) throws CompilationError {
         // Check if the variable being assigned is declared
-        if (!Runner.intStack.peek().containsElement(args[0])) {
-            throw new CompilationError("Undeclared Variable Usage On Line:");
+        if (!(Runner.intStack.peek().containsElement(args[0]) || (Runner.boolStack.peek().containsElement(args[0])))) {
+            throw new CompilationError("Undeclared Variable Usage");
         }
 
         // Ensure the assignment uses the correct "=" operator
         if (!args[1].equals("=")) {
-            throw new CompilationError("Invalid Instruction On Line:");
+            throw new CompilationError("Invalid Instruction");
         }
 
         // Execute the assignment using the handler
@@ -124,6 +124,8 @@ public class Compiler {
         if (!(args[0].equals("end") && args[1].equals("if") && args.length == 2)) {
             throw new CompilationError("Invalid End If Statement");
         }
+
+        IfStatementHandler.executeEndIf();
     }
 
     // Ensures a while statement is valid
@@ -162,12 +164,24 @@ public class Compiler {
     private static void validatePrint(String[] args) throws CompilationError {
         // Retrieve the output message and add it to the queue
         try {
-            String output = String.valueOf(PrintHandler.getPrintMessage(args));
+            String output = PrintHandler.getPrintMessage(args, Arrays.asList(args).contains("\"") );
+
             if (Runner.intStack.size() == 1) {
-                outputQueue.add("PROGRAM OUTPUT: " + output);
+                if(!Runner.testing)
+                    System.out.println("PROGRAM OUTPUT: " + output);
             }
         } catch (RuntimeException | CompilationError e) {
             throw e;
         }
+    }
+
+    private static void validateInput(String[] args) throws CompilationError {
+        if(args.length > 2)
+            throw new CompilationError("Invalid Input Statement");
+
+        if(!(Runner.intStack.peek().containsElement(args[1]) || Runner.boolStack.peek().containsElement(args[1])))
+            throw new CompilationError("Invalid Variable On Input Statement");
+
+        InputHandler.executeInput(args);
     }
 }

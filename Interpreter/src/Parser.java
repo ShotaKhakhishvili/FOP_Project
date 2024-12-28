@@ -1,3 +1,6 @@
+import java.net.URISyntaxException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.io.*;
 import java.util.List;
@@ -43,12 +46,17 @@ public class Parser{
  * @throws CompilationError if an error occurs during file reading or processing
  */
 
-    public void readFile() throws CompilationError {
+    public void readFile() throws CompilationError, URISyntaxException {
         File file = new File(fileName);
-        String absolutePath = file.getAbsolutePath();
+
+        String name = String.valueOf(Parser.class.getProtectionDomain().getCodeSource().getLocation());
+
+        name = name.substring(0, name.length() - 27);
+        name += "Interpreter/CodesInBASIC/" + fileName;
+        name = name.substring(6);
 
         // Try-with-resources to ensure the BufferedReader is closed automatically
-        try (BufferedReader reader = new BufferedReader(new FileReader(absolutePath))) {
+        try (BufferedReader reader = new BufferedReader(new FileReader(name))) {
             String line;
 
             // Read each line and add it to the fileLines list
@@ -58,7 +66,7 @@ public class Parser{
 
         } catch (FileNotFoundException e) {
             // Handle the case where the specified file does not exist
-            System.out.println("File not found: " + absolutePath);
+            System.out.println("File not found: " + name);
 
         } catch (IOException e) {
             // Handle errors that occur while reading the file

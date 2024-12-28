@@ -2,7 +2,6 @@ import java.security.KeyPair;
 import java.util.*;
 
 public class LoopHandler {
-    static Stack<Triple<Integer, String[], List<String>>> stack = new Stack<>();
 
     public static void executeWhileLoop(String[] args) throws CompilationError {
         String[] expressionArgs = new String[args.length - 1];
@@ -11,7 +10,8 @@ public class LoopHandler {
             expressionArgs[i-1] = args[i];
         }
 
-        stack.add(new Triple<>(Runner.pc, expressionArgs, new ArrayList<String>()));
+        Runner.scopeList.add(new Triple<>(Runner.pc, expressionArgs, new ArrayList<String>()));
+        Runner.isLoop.add(true);
 
         if(!ExpressionBoolean.executeExpression(expressionArgs)){
             int whileCounter = 1;
@@ -21,8 +21,13 @@ public class LoopHandler {
             Runner.saveVariableToTemp();
 
             while(whileCounter > 0){
-                Compiler.compile();
-                Instruction currentInstruction = InstructionHandler.decode(lineArgs[RunningState.pc]);
+                try{
+                    Compiler.compile();
+                }catch (RuntimeException e){
+                    Runner.pc++;
+                    continue;
+                }
+                Instruction currentInstruction = InstructionHandler.decode(lineArgs[Runner.pc]);
                 if(currentInstruction == Instruction.wend)
                     whileCounter--;
                 else if(currentInstruction == Instruction.wwhile)
@@ -35,16 +40,27 @@ public class LoopHandler {
         }
     }
     public static void executeWendStatement() throws CompilationError {
-        Triple<Integer,String[],List<String>> current = stack.peek();
+        int index = Runner.scopeList.size() - 1;
+
+        while(!Runner.isLoop.get(index))
+            index--;
+
+        Triple<Integer,String[],List<String>> current = Runner.scopeList.get(index);
 
         while(!current.getThird().isEmpty()){
             Runner.intStack.peek().deleteVariable(current.getThird().get(0));
+            try{
+                Runner.boolStack.peek().deleteVariable(current.getThird().remove(0));
+            }catch (IndexOutOfBoundsException e){
+
+            }
         }
 
-        if(ExpressionBoolean.executeExpression(current.getSecond()) && Runner.intStack.size() == 1){
+        if(ExpressionBoolean.executeExpression(current.getSecond()) && Runner.boolStack.size() == 1){
             Runner.pc = current.getFirst();
         }else{
-            stack.pop();
+            Runner.scopeList.remove(index);
+            Runner.isLoop.remove(index);
         }
     }
 }

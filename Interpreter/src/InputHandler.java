@@ -1,24 +1,28 @@
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Scanner;
 import java.util.Stack;
 
 public class InputHandler {
-    public static void executeInput(String[] args){
-        String input = System.in.toString();
-        try {
-            Integer integerInput = Integer.valueOf(input);
-        }catch (NumberFormatException e){
-            throw new RuntimeException();
-        }
-    }
+    public static void executeInput(String[] args) throws CompilationError {
+        if(Runner.testing) return;
 
-    private static void checkInputBefore(String[] args) throws CompilationError{
-        
-        if(args.length != 2 || Variables.checkValidity(args[0]))
-            throw new CompilationError("Illegal Input Statement");
-        if(!Runner.intStack.peek().containsElement(args[1])){
-            throw new CompilationError("Attempt To Input Into An Undeclared Variable '" + args[1] + "'");
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.print("PROGRAM INPUT : ");
+
+        String name = scanner.nextLine();        // Read a line of input
+
+        try {
+            if(Runner.intStack.peek().containsElement(args[1]))
+                Runner.intStack.peek().setValue(args[1], Integer.valueOf(name));
+            else
+                Runner.boolStack.peek().setValue(args[1], Boolean.valueOf(name));
+        }catch (NumberFormatException e){
+            throw new RuntimeException("Invalid Input Formating. Input Only Supports Numbers :(");
         }
+
+        scanner.close();
     }
 
 }

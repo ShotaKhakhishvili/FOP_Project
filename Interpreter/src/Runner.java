@@ -1,17 +1,18 @@
+import java.net.URISyntaxException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Stack;
 
-/**
- * RunningState class represents the state of the program during execution.
- * It holds information about the current program counter (pc), the active state,
- * the current instruction being executed, and the type of assignment.
- */
-class RunningState{
-    public static Integer pc = 0; // current line
+
+public class Runner{
+    public static Integer pc; // current line
     String[] args; // current instruction
     Instruction type; // current instruction type
-}
+    public static boolean testing = true;
 
-public class Runner extends RunningState{
+    static List<Triple<Integer, String[], List<String>>> scopeList = new ArrayList<>();
+    static List<Boolean> isLoop = new ArrayList<>();
+
     // Stack to hold Variables of Boolean type, managing the state of boolean variables in a Last In, First Out (LIFO) order.
         static Stack<Variables<Boolean>> boolStack = new Stack<>();
 
@@ -31,7 +32,15 @@ public class Runner extends RunningState{
      * @param fileName The name of the source file to be parsed.
      * @throws CompilationError If there is an error during compilation or parsing of the file.
      */
-    Runner(String fileName) throws CompilationError {
+    public static void Declare(String fileName) throws CompilationError, URISyntaxException {
+        pc = 0;
+        scopeList.clear();
+        isLoop.clear();
+        boolStack.clear();
+        intStack.clear();
+
+
+
         // Create a new Parser instance to read and process the given file.
         Parser parser = new Parser(fileName);
 
@@ -65,7 +74,7 @@ public class Runner extends RunningState{
      *
      * @throws CompilationError If an error occurs during the compilation process.
      */
-    public void run() throws CompilationError {
+    public static void run() throws CompilationError {
         // Continue compiling each line of code until all lines have been processed
         while(pc < lines.length){
             Compiler.compile();
@@ -121,7 +130,7 @@ public class Runner extends RunningState{
 
             // Handle print instructions
             case print:
-                PrintHandler.executePrint(args);
+                PrintHandler.executePrint(args,false);
                 break;
 
             // Handle 'if' statement instructions

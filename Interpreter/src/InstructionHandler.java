@@ -75,7 +75,7 @@ public interface InstructionHandler {
 
                 // Check if the operator is supported
                 String operator = String.valueOf(c);
-                if (!isSupportedOperator(operator)) {
+                if (!isSupportedOperator(operator) && c != '"') {
                     throw new CompilationError("Illegal character encountered: " + c);
                 }
 
@@ -124,6 +124,10 @@ public interface InstructionHandler {
             return Instruction.invalid;
         }
 
-        return Instruction.assignment;
+        if(args[1].equals("="))
+            return Instruction.assignment;
+
+        return Instruction.invalid;
     }
+
 }

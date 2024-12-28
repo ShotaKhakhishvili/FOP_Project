@@ -89,7 +89,14 @@ public class ExpressionBoolean {
                     i++;
                 } else {
                     // It's a standalone boolean variable
-                    boolean value = Runner.boolStack.peek().getValue(tokens[i]);
+                    boolean value;
+                    if(token.equals("true")){
+                        value = true;
+                    }else if(token.equals("false")){
+                        value = false;
+                    }else {
+                        value = Runner.boolStack.peek().getValue(tokens[i]);
+                    }
                     operandStack.push(value);
                     i++;
                 }
@@ -142,33 +149,14 @@ public class ExpressionBoolean {
      * @return The result of the comparison.
      */
     private static boolean evaluateComparison(String leftToken, String operator, String rightToken) throws CompilationError {
-        Integer leftValue = getIntegerValue(leftToken);
-        Integer rightValue = getIntegerValue(rightToken);
+        Integer leftValue = Variables.getIntegerValue(leftToken);
+        Integer rightValue = Variables.getIntegerValue(rightToken);
 
         BiPredicate<Integer, Integer> compOp = comparisonOperators.get(operator);
         if (compOp == null) {
             throw new CompilationError("Unsupported comparison operator: " + operator);
         }
         return compOp.test(leftValue, rightValue);
-    }
-
-    /**
-     * Retrieves the integer value of a token, either directly or from Runner.ints.
-     *
-     * @param token The token representing an integer or variable.
-     * @return The integer value.
-     */
-    private static Integer getIntegerValue(String token) throws CompilationError {
-        try {
-            return Integer.parseInt(token);
-        } catch (NumberFormatException e) {
-            // Assume it's a variable
-            Integer value = Runner.intStack.peek().getValue(token);
-            if (value == null) {
-                throw new CompilationError("Undefined integer variable: " + token);
-            }
-            return value;
-        }
     }
 
     /**

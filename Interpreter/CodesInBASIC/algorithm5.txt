@@ -1,0 +1,21 @@
+dim n as integer
+print "input a number to find if it is prime or not"
+input n
+dim answer as boolean
+answer = true
+dim i as integer
+i = 2
+while i < n
+    dim t as integer
+    t = n % i
+    if t = 0 then
+        answer = false
+    end if
+    i = i + 1
+wend
+if answer = 1 then
+    print "Number " n " is a prime number"
+end if
+if answer = 0 then
+    print "Number " n " is not a prime number"
+end if

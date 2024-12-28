@@ -1,5 +1,7 @@
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Stack;
 
 
 public class Variables<T>{
@@ -23,11 +25,11 @@ public class Variables<T>{
      * @throws RuntimeException if the variable `varName` is not declared in the `map`.
      */
     public void deleteVariable(String varName){
-        if(!map.containsKey(varName))
-            throw new RuntimeException("Variable '" + varName + "' is not declared");
-
-        LoopHandler.stack.peek().getThird().remove(varName);
-        map.remove(varName);
+        try {
+            map.remove(varName);
+            Runner.scopeList.get(Runner.scopeList.size() - 1).getThird().remove(varName);
+        }catch (Exception e){
+        }
     }
 
     /**
@@ -110,12 +112,12 @@ public class Variables<T>{
      *   an exception (e.g., `throw new RuntimeException`).
      * - The `map` data structure is assumed to be a key-value store that maintains variable names and their values.
      */
-    public void setValue(String varName, T varValue){
+    public void setValue(String varName, T varValue) throws CompilationError {
         if(map.containsKey(varName)) {
             map.put(varName, varValue);
         }
         else {
-            System.out.println("Error");
+            throw new CompilationError("Variable '" + varName + "' is not declared");
         }
     }
 
@@ -150,8 +152,8 @@ public class Variables<T>{
      *       custom object providing a `getThird()` method, and `map` is a predefined key-value store.
      */
     public void declareVariable(String varName, T varValue){
-        if(!LoopHandler.stack.isEmpty()){
-            LoopHandler.stack.peek().getThird().add(varName);
+        if(!Runner.scopeList.isEmpty()){
+            Runner.scopeList.get(Runner.scopeList.size() - 1).getThird().add(varName);
         }
 
         map.put(varName, varValue);
@@ -173,12 +175,27 @@ public class Variables<T>{
     }
 
 
-
-
-
-
-
-
-
-
+    /**
+     * Retrieves the integer value of a token, either directly or from Runner.ints.
+     *
+     * @param token The token representing an integer or variable.
+     * @return The integer value.
+     */
+    public static int getIntegerValue(String token) throws CompilationError {
+        try {
+            return Integer.parseInt(token);
+        } catch (NumberFormatException e) {
+            // Assume it's a variable
+            Integer value;
+            try {
+                value = Runner.intStack.peek().getValue(token);
+            }catch (CompilationError ev){
+                value = Runner.boolStack.peek().getValue(token) ? 1 : 0;
+            }
+            if (value == null) {
+                throw new CompilationError("Undefined integer variable: " + token);
+            }
+            return value;
+        }
+    }
 }

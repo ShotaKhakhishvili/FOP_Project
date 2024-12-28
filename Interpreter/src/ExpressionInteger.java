@@ -63,7 +63,7 @@ public class ExpressionInteger {
                 i++;
             } else {
                 // Operand: can be an integer or a variable
-                int value = getIntegerValue(token);
+                int value = Variables.getIntegerValue(token);
                 operandStack.push(value);
                 i++;
             }
@@ -107,27 +107,7 @@ public class ExpressionInteger {
             int result = operation.apply(left, right);
             operandStack.push(result);
         } catch (ArithmeticException e) {
-            throw new CompilationError(e.getMessage());
-        }
-    }
-
-    /**
-     * Retrieves the integer value of a token, either directly or from Runner.ints.
-     *
-     * @param token The token representing an integer or variable.
-     * @return The integer value.
-     * @throws CompilationError If the token is neither an integer nor a defined variable.
-     */
-    private static int getIntegerValue(String token) throws CompilationError {
-        try {
-            return Integer.parseInt(token);
-        } catch (NumberFormatException e) {
-            // Assume it's a variable
-            Integer value = Runner.intStack.peek().getValue(token);
-            if (value == null) {
-                throw new CompilationError("Undefined integer variable: " + token);
-            }
-            return value;
+            throw e;
         }
     }
 
@@ -138,6 +118,6 @@ public class ExpressionInteger {
      * @return True if it's an operator, false otherwise.
      */
     private static boolean isOperator(String token) {
-        return arithmeticOperators.containsKey(token);
+        return ExpressionInteger.arithmeticOperators.containsKey(token);
     }
 }

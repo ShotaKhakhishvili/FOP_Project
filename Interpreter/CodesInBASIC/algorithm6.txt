@@ -1,0 +1,40 @@
+dim answer as boolean
+dim n as integer
+
+answer = true
+
+print "Input a number to check if it is a palindrome."
+input n
+
+while n < 0
+    print "The algorithm doesn't support negative numbers, please try again."
+    input n
+wend
+
+while n > 9
+    dim temp as integer
+    dim power as integer
+    dim temp1 as integer
+    temp = n
+    power = 1
+
+    while temp > 10
+        temp = temp / 10
+        power = power * 10
+    wend
+
+    temp1 = n % 10
+
+    if temp <> temp1 then
+        answer = false
+    end if
+
+    n = (n - (temp * power + n % 10)) / 10
+wend
+
+if answer = 1 then
+    print "The answer is: palindrome"
+end if
+if answer = 0 then
+    print "The answer is: not a palindrome"
+end if

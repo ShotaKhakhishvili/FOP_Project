@@ -5,7 +5,7 @@ public class ExpressionInteger {
 
     // Define the arithmetic operators with their corresponding BiFunction
     static Map<String, BiFunction<Integer, Integer, Integer>> arithmeticOperators = new HashMap<>() {{
-        put("+", (a, b) -> a + b);
+        put("+", Integer::sum);
         put("-", (a, b) -> a - b);
         put("*", (a, b) -> a * b);
         put("/", (a, b) -> {

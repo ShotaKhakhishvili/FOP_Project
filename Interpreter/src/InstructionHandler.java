@@ -75,9 +75,6 @@ public interface InstructionHandler {
 
                 // Check if the operator is supported
                 String operator = String.valueOf(c);
-                if (!isSupportedOperator(operator) && c != '"') {
-                    throw new CompilationError("Illegal character encountered: " + c);
-                }
 
                 tokens.add(operator);
                 i++;

@@ -22,7 +22,8 @@ public class LoopHandler {
 
             while(whileCounter > 0){
                 try{
-                    Compiler.compile();
+                    if(Runner.testing)
+                        Compiler.compile();
                 }catch (RuntimeException e){
                     Runner.pc++;
                     continue;
@@ -34,9 +35,12 @@ public class LoopHandler {
                     whileCounter++;
                 Runner.pc++;
             }
-            Runner.loadVariableToTemp();
 
             Runner.pc--;
+
+            executeWendStatement();
+
+            Runner.loadVariableToTemp();
         }
     }
     public static void executeWendStatement() throws CompilationError {
@@ -48,19 +52,19 @@ public class LoopHandler {
         Triple<Integer,String[],List<String>> current = Runner.scopeList.get(index);
 
         while(!current.getThird().isEmpty()){
-            Runner.intStack.peek().deleteVariable(current.getThird().get(0));
-            try{
-                Runner.boolStack.peek().deleteVariable(current.getThird().remove(0));
-            }catch (IndexOutOfBoundsException e){
+            if (Runner.intStack.peek().containsElement(current.getThird().get(0)))
+                Runner.intStack.peek().deleteVariable(current.getThird().remove(0));
 
-            }
+            else if (Runner.boolStack.peek().containsElement(current.getThird().get(0)))
+                Runner.boolStack.peek().deleteVariable(current.getThird().remove(0));
         }
 
-        if(ExpressionBoolean.executeExpression(current.getSecond()) && Runner.boolStack.size() == 1){
+        if(ExpressionBoolean.executeExpression(current.getSecond()) && Runner.boolStack.size() == 1 && !Runner.testing){
             Runner.pc = current.getFirst();
         }else{
             Runner.scopeList.remove(index);
             Runner.isLoop.remove(index);
         }
+
     }
 }

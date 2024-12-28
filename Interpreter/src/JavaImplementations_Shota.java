@@ -16,22 +16,22 @@ public class JavaImplementations_Shota{
     }
 
     // Implementation of the algorithm 6 in java
-    public void task6(int n){
-        // We reverse num and then compare num and reversed number.
-        int reversed = 0;
-        int t2 = n;
+    public static void task6(int n){
+        boolean answer = true;
+        while(n > 9){
+            int temp = n;
+            int power = 1;
+            while(temp > 10){
+                temp /= 10;
+                power *= 10;
+            }
 
-        while(t2 > 0){
-            int t = t2 % 10;
-            reversed = reversed * 10;
-            reversed = reversed + t;
-            t2 = t2 / 10;
+            if(temp != n % 10)
+                answer = false;
+
+            n -= temp * power + n % 10;
+            n /= 10;
         }
-
-        boolean answer = false;
-
-        if(reversed == n) // if the reversed integer is equal to the given integer, then it is a palidrome
-            answer = true;
 
         System.out.println(answer);
     }

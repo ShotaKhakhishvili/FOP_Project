@@ -35,12 +35,11 @@ public class Runner{
      */
     public static void Declare(String fileName) throws CompilationError, URISyntaxException {
         pc = 0;
+
         scopeList.clear();
         isLoop.clear();
         boolStack.clear();
         intStack.clear();
-
-
 
         // Create a new Parser instance to read and process the given file.
         Parser parser = new Parser(fileName);
@@ -78,6 +77,7 @@ public class Runner{
     public static void run() throws CompilationError {
         // Continue compiling each line of code until all lines have been processed
         while(pc < lines.length){
+//            System.out.println(pc + 1);
             Compiler.compile();
             pc++;
         }

@@ -25,11 +25,7 @@ public class Variables<T>{
      * @throws RuntimeException if the variable `varName` is not declared in the `map`.
      */
     public void deleteVariable(String varName){
-        try {
-            map.remove(varName);
-            Runner.scopeList.get(Runner.scopeList.size() - 1).getThird().remove(varName);
-        }catch (Exception e){
-        }
+        map.remove(varName);
     }
 
     /**

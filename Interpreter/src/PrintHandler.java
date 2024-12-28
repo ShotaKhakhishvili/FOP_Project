@@ -26,8 +26,16 @@ public class PrintHandler {
         String stringLine = Runner.lines[Runner.pc];
         char[] line = stringLine.toCharArray();
 
-        // Skipping to the prin_t_ part this way, since we know the first word is _print_
         int i = 0;
+        for(char ch : line){
+           if(ch == '"') i++;
+        }
+
+        if(i % 2 == 1)
+            throw new CompilationError("Invalid String Value Inside Print Statement");
+
+        // Skipping to the prin_t_ part this way, since we know the first word is _print_
+        i = 0;
         while (line[i] != 't')i++;
         for(i++; i < line.length; i++){
             if(string){
@@ -54,6 +62,11 @@ public class PrintHandler {
                 throw new CompilationError("Invalid Print Statement");
             }
             current.append(line[i]);
+        }
+
+        if(!current.isEmpty()){
+            String val = String.valueOf(Variables.getIntegerValue(String.valueOf(current)));
+            answer.append(val);
         }
 
         return answer.toString();

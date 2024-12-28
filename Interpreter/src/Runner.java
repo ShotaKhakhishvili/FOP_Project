@@ -1,5 +1,6 @@
 import java.net.URISyntaxException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Stack;
 
@@ -64,6 +65,8 @@ public class Runner{
             // Convert the line to lowercase and split it into arguments using InstructionHandler.
             lineArgs[i] = InstructionHandler.split(lines[i].toLowerCase());
         }
+
+        Compiler.resetStacks();
     }
 
     /**

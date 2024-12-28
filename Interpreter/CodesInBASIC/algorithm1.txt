@@ -1,0 +1,13 @@
+dim a as integer
+dim n as integer
+dim answer as integer
+
+print "Input a number to find the sum of all positive numbers less than equal to that number"
+input n
+
+while (a < n or a = n)
+    answer = answer + a
+    a = a + 1
+wend
+
+print "The answer is: " answer

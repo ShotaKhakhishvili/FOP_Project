@@ -1,0 +1,14 @@
+dim result as integer
+dim n as integer
+
+result = 1
+
+print "Input a number to find its factorial"
+input n
+
+while n > 0
+    result = result * n
+    n = n - 1
+wend
+
+print "The answer is: " result

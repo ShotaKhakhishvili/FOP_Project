@@ -1,0 +1,25 @@
+dim a as integer
+dim b as integer
+print "Input two numbers to find their GCD"
+
+print "Input the first number..."
+input a
+print "Input the second number.."
+input b
+
+while a < 0 or b < 0
+    print "Sorry, but the given algorithm only works for positive integers, try some other inputs."
+    print "Input the first number..."
+    input a
+    print "Input the second number.."
+    input b
+wend
+
+while b > 0
+    dim temp as integer
+    temp = b
+    b = a % b
+    a = temp
+wend
+
+print "The answer is: " a

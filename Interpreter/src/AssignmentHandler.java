@@ -6,7 +6,7 @@ public class AssignmentHandler {
      * @param args The arguments passed for the assignment. The first argument is the variable name, the second argument is the operator, and the rest are the expression components.
      * @throws CompilationError if there is an error during the execution of the expression.
      */
-    static void executeAssignment(String[] args) throws CompilationError {
+    static void executeAssignment(String[] args) throws CompilationError, CompilationError {
         // Prepare an array to hold the parts of the expression, excluding the first two arguments
         String[] expressionArgs = new String[args.length - 2];
 

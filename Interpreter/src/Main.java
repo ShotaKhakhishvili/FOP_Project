@@ -7,8 +7,7 @@ import java.util.function.Predicate;
 public class Main {
     public static void main(String[] args) throws CompilationError, URISyntaxException {
 
-
-        for(int i = 5; i <= 5; i++){
+        for(int i = 1; i <= 10; i++){
             Runner.Declare("algorithm" + i + ".txt");
             System.out.println("(" + i + ")____________Running an algorithm____________(" + i + ")");
             System.out.println();

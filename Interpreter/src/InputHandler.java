@@ -1,17 +1,13 @@
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Scanner;
-import java.util.Stack;
+import java.util.*;
 
 public class InputHandler {
+    static Scanner scanner = new Scanner(System.in);
     public static void executeInput(String[] args) throws CompilationError {
         if(Runner.testing) return;
 
-        Scanner scanner = new Scanner(System.in);
-
         System.out.print("PROGRAM INPUT : ");
 
-        String name = scanner.nextLine();        // Read a line of input
+        String name = scanner.nextLine();
 
         try {
             if(Runner.intStack.peek().containsElement(args[1]))
@@ -22,7 +18,6 @@ public class InputHandler {
             throw new RuntimeException("Invalid Input Formating. Input Only Supports Numbers :(");
         }
 
-        scanner.close();
     }
 
 }

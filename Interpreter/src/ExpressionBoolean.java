@@ -95,7 +95,11 @@ public class ExpressionBoolean {
                     }else if(token.equals("false")){
                         value = false;
                     }else {
-                        value = Runner.boolStack.peek().getValue(tokens[i]);
+                        try{
+                            value = Runner.boolStack.peek().getValue(tokens[i]);
+                        }catch (CompilationError e){
+                            value = !(Runner.intStack.peek().getValue(tokens[i]) == 0);
+                        }
                     }
                     operandStack.push(value);
                     i++;

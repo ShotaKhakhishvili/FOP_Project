@@ -22,7 +22,13 @@ public class IfStatementHandler {
             Runner.saveVariableToTemp();
 
             while(ifCounter > 0){
-                Compiler.compile();
+                try{
+                    if(Runner.testing)
+                        Compiler.compile();
+                }catch (RuntimeException e){
+                    Runner.pc++;
+                    continue;
+                }
                 Instruction currentInstruction = InstructionHandler.decode(lineArgs[Runner.pc]);
                 if(currentInstruction == Instruction.endif)
                     ifCounter--;
@@ -31,9 +37,12 @@ public class IfStatementHandler {
                 Runner.pc++;
             }
 
+            Runner.pc--;
+
+            executeEndIf();
+
             Runner.loadVariableToTemp();
 
-            Runner.pc--;
         }
     }
 
@@ -48,12 +57,11 @@ public class IfStatementHandler {
         Runner.isLoop.remove(index);
 
         while(!current.getThird().isEmpty()){
-            Runner.intStack.peek().deleteVariable(current.getThird().get(0));
-            try{
-                Runner.boolStack.peek().deleteVariable(current.getThird().remove(0));
-            }catch (IndexOutOfBoundsException e){
+            if (Runner.intStack.peek().containsElement(current.getThird().get(0)))
+                Runner.intStack.peek().deleteVariable(current.getThird().remove(0));
 
-            }
+            else if (Runner.boolStack.peek().containsElement(current.getThird().get(0)))
+                Runner.boolStack.peek().deleteVariable(current.getThird().remove(0));
         }
     }
 }

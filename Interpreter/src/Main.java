@@ -25,6 +25,7 @@ public class Main {
             Runner.run();
 
             System.out.println();
+
         }
     }
 }

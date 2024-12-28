@@ -1,0 +1,16 @@
+dim answer as integer
+dim n as integer
+
+print "Input an integer to find the sum of its digits"
+input n
+
+if n < 0 then
+    n = n - 2 * n
+end if
+
+while n > 0
+    answer = answer + n % 10
+    n = n / 10
+wend
+
+print "The answer is: " answer

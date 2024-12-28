@@ -1,0 +1,16 @@
+dim n as integer
+dim i as integer
+
+print "Input an integer see its multiplication table"
+input n
+
+i = 1
+
+print "The multiplication table:"
+
+while i < 11
+    dim temp as integer
+    temp = i * n
+    print temp
+    i = i + 1
+wend

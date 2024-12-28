@@ -8,6 +8,13 @@ public class Compiler {
     private static Set<Integer> wends = new HashSet<>(); // Tracks positions of "wend" statements
     private static Set<Integer> whiles = new HashSet<>(); // Tracks positions of "while" statements
 
+    public static void resetStacks(){
+        ifs.clear();
+        endifs.clear();
+        wends.clear();
+        whiles.clear();
+    }
+
     // Queue to collect output messages
     public static Queue<String> outputQueue = new ArrayDeque<>();
 

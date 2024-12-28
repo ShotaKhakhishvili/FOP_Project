@@ -15,68 +15,70 @@ import java.util.Scanner;
  */
 public class Parser{
 
-    //List to store lines read from the file
+    // List to store lines read from the file
     private List<String> fileLines = new ArrayList<>();
 
-    //Array to hold processed lines
+    // Array to hold processed lines
     private String[] lines;
 
-    //We combine lines into one string
+    // Single string combining all processed lines from the file
     private String code = "";
 
-    //Name of the file to be parsed - fileName
+    // Name of the file to be parsed - fileName
     private String fileName;
 
 
 
-        /**
-         * Constructs a {@code Parser} instance with the given file name.
-         * @param fileName the name of the file to be parsed
-         */
-        Parser(String fileName){
-            this.fileName = fileName;
-        }
-
-
-
     /**
+     * Constructs a {@code Parser} instance with the given file name.
+     * @param fileName the name of the file to be parsed
+     */
+    Parser(String fileName){
+        this.fileName = fileName;
+    }
+
+
+
+
+/**
  * Reads the file specified by {@code fileName} and processes its content.
- * Stores each line in a list and prepares the file for further evaluation.
  *
- * @throws CompilationError if an error occurs during file reading or processing
+ * -- Reads each line from the file into a list
+ * -- Converts the list into a single combined code string
+ * -- Stores individual lines into an array for further evaluation
+ *
+ * @throws CompilationError    if an error occurs during file reading or processing.
+ * @throws URISyntaxException if there is an issue with the file path.
  */
-
     public void readFile() throws CompilationError, URISyntaxException {
-        File file = new File(fileName);
+    File file = new File(fileName);
 
-        String name = String.valueOf(Parser.class.getProtectionDomain().getCodeSource().getLocation());
+    // Adjust file path to locate the target file within the project structure
+    String name = String.valueOf(Parser.class.getProtectionDomain().getCodeSource().getLocation());
+    name = name.substring(0, name.length() - 27);
+    name += "Interpreter/CodesInBASIC/" + fileName;
+    name = name.substring(6);
 
-        name = name.substring(0, name.length() - 27);
-        name += "Interpreter/CodesInBASIC/" + fileName;
-        name = name.substring(6);
+    // Open file using BufferedReader, ensuring resources are closed automatically
+    try (BufferedReader reader = new BufferedReader(new FileReader(name))) {
+        String line;
 
-        // Try-with-resources to ensure the BufferedReader is closed automatically
-        try (BufferedReader reader = new BufferedReader(new FileReader(name))) {
-            String line;
-
-            // Read each line and add it to the fileLines list
-            while ((line = reader.readLine()) != null){
-                fileLines.add(line);
-            }
-
-        } catch (FileNotFoundException e) {
-            // Handle the case where the specified file does not exist
-            System.out.println("File not found: " + name);
-
-        } catch (IOException e) {
-            // Handle errors that occur while reading the file
-            System.out.println("An error occurred while reading the file: " + e.getMessage());
+        // Read each line and add it to the fileLines list
+        while ((line = reader.readLine()) != null){
+            fileLines.add(line);
         }
 
+    } catch (FileNotFoundException e) {
+        // Handle the case where the specified file does not exist
+        System.out.println("File not found: " + name);
 
-        // Process the content into a single code string
+    } catch (IOException e) {
+        // Handle errors that occur while reading the file
+        System.out.println("An error occurred while reading the file: " + e.getMessage());
+    }
+
+        // Combine lines into a single string
         calcCode();
-
 
         // Prepare the lines for further processing
         evalLines();
@@ -85,8 +87,11 @@ public class Parser{
 
 
     /**
-     * Combines all the non-empty lines from the file into one string,
-     * adding a semicolon at the end of each line.
+     * Combines all non-empty lines from the file into a single string.
+     *
+     * -- Trims unnecessary spaces from each line
+     * -- Adds a semicolon to the end of each line
+     * -- Updates the {@code code} field
      */
     private void calcCode() {
         for (String str : fileLines) {
@@ -99,8 +104,8 @@ public class Parser{
 
 
     /**
-     * Copies the lines from the {@code fileLines} list into the {@code lines} array.
-     * This prepares the lines for output or further processing.
+     * Converts the {@code fileLines} list into the {@code lines} array
+     * -- This prepares the lines for output or further processing.
      */
     private void evalLines(){
         lines = new String[fileLines.size()];
@@ -113,28 +118,28 @@ public class Parser{
 
 
     /**
-     * Returns an array containing all processed lines from the file.
+     * getter...
+     * Returns the combined code as a single string.
      *
-     * @return an array of strings representing the file's lines
+     * @return the code with all file lines joined, ending with semicolons.
      */
     public String getCode(){
         return code;
     }
 
 
+    
     /**
-     * Returns an array containing all processed lines from the file.
+     * getter...
+     * Returns the lines from the file as an array.
      *
-     * @return an array of strings representing the file's lines
+     * @return an array of strings, each representing a line from the file.
      */
     public String[] getLines(){
         return lines;
     }
 
 
+    }
 
-    /**
-     * Prints all the processed lines to the console.
-     */
 
-}

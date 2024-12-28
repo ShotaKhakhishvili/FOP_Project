@@ -8,7 +8,6 @@ public class JavaImplementations_Shota{
             int t = n % i;
             if(t == 0){ // if at some point, num is divisible my i, then it is not prime
                 answer = false;
-
             }
             i++;
         }

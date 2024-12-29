@@ -4,10 +4,10 @@ import java.util.*;
 
 
 /**
- * LoopHandler class
+ * @LoopHandler class -
  *
- * Handles the execution of "while" loops in the interpreter -- It evaluates loop conditions -- manages nested loops --
- *  and tracks variable scopes, ensuring correct program flow and variable state during loop execution.
+ * Handles the execution of "while" loops in the interpreter -- It evaluates loop conditions -- manages nested loops
+ *      and tracks variable scopes, ensuring correct program flow and variable state during loop execution.
  */
 public class LoopHandler {
 

@@ -84,28 +84,24 @@ public class IfStatementHandler {
             index--;
         }
 
-
         // Remove the current scope and associated data.
         Triple<Integer, String[], List<String>> current = Runner.scopeList.remove(index);
+
+        // Remove the corresponding loop flag for the identified scope.
         Runner.isLoop.remove(index);
 
+        // Process all variables associated with the current scope.
+        while(!current.getThird().isEmpty()){
 
-        // Delete variables associated with this scope.
-        while (!current.getThird().isEmpty()) {
+            // If the variable exists in the integer stack, delete it from the stack.
+            if (Runner.intStack.peek().containsElement(current.getThird().get(0)))
+                Runner.intStack.peek().deleteVariable(current.getThird().remove(0));
 
-            // Get the first variable from the list of variables in the current scope.
-            String variable = current.getThird().get(0);
+            // If the variable exists in the boolean stack, delete it from the stack.
+            else if (Runner.boolStack.peek().containsElement(current.getThird().get(0)))
+                Runner.boolStack.peek().deleteVariable(current.getThird().remove(0));
 
 
-            // Remove the variable from the appropriate stack.
-            if (Runner.intStack.peek().containsElement(variable)) {
-                Runner.intStack.peek().deleteVariable(variable);
-            } else if (Runner.boolStack.peek().containsElement(variable)) {
-                Runner.boolStack.peek().deleteVariable(variable);
-            }
-
-            // Remove the variable from the current scope's list.
-            current.getThird().remove(0);
         }
     }
 }

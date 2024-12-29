@@ -256,8 +256,8 @@ The interpreter supports the following statements:
 
 1. We have pepared 10 algorithms in .txt format inside CodesInBASIC directory, inside Interpreter directory.
 2. Run the main class (`Main.java`) to start the compilation of those 10 algorithms one by one.
-3. You can also change those .txt algorithm contents, to test your own codes.
-4. Don't change .txt file names, nor delete them or the Java program won't be able to read them.
+3. You can also add your own .txt file and pass its name as a program argument to main, so it can run it.
+4. If you want to test our pre-written algorithms, don't delete any of them nor change their names, or else the Java program won't be able to run properly.
 
 ---
 

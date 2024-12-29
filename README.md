@@ -1,6 +1,6 @@
-# BASIC to Java Interpreter
+# BASIC Interpreter In Java
 
-This project is an interpreter that translates BASIC programming language code snippets into Java, compiles them, and executes the resulting Java code. Below is a detailed explanation of the features supported by the interpreter, including usage examples and functionality.
+This project is an interpreter reading BASIC programming language code snippets in Java, compiling them, and executing the resulting code. Below is a detailed explanation of the features supported by the interpreter, including usage examples and functionality.
 
 ---
 

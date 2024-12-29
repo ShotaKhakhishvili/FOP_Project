@@ -2,6 +2,13 @@ import java.security.KeyPair;
 import java.util.*;
 
 
+
+/**
+ * LoopHandler class
+ *
+ * Handles the execution of "while" loops in the interpreter -- It evaluates loop conditions -- manages nested loops --
+ *  and tracks variable scopes, ensuring correct program flow and variable state during loop execution.
+ */
 public class LoopHandler {
 
 
@@ -63,7 +70,7 @@ public class LoopHandler {
     }
 
 
-    
+
     /**
      * Executes the "wend" statement by managing variable scopes and determining
      * whether to re-evaluate the loop condition or exit the loop.

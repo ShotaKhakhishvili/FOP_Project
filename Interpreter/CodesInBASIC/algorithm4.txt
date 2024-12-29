@@ -1,0 +1,17 @@
+dim reversed as integer
+dim n as integer
+
+print "Input a number to reverse its digit sequence. It should not be ending with 0, the algorithm doesn't support that."
+input n
+
+while n < 0
+    print "Sorry, but this algorithm doesn't support negative numbers. Try again."
+    input n
+wend
+
+while n > 0
+    reversed = reversed * 10 + n % 10
+    n = n / 10
+wend
+
+print "The answer is: " reversed

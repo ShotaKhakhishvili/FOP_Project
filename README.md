@@ -1,6 +1,6 @@
-# BASIC Interpreter In Java
+# BASIC to Java Interpreter
 
-This project is an interpreter reading BASIC programming language code snippets in Java, compiling them, and executing the resulting code. Below is a detailed explanation of the features supported by the interpreter, including usage examples and functionality.
+This project is an interpreter that translates BASIC programming language code snippets into Java, compiles them, and executes the resulting Java code. Below is a detailed explanation of the features supported by the interpreter, including usage examples and functionality.
 
 ---
 
@@ -314,3 +314,10 @@ This generates a multiplication table for a given number.
 This computes the nth Fibonacci number.
 
 ---
+
+## Contributions
+
+1. Shota Khakhishvili - Project Organization/Planning.
+2. Teimuraz Khatiashvili - Algorithm Implementation/Construction.
+3. Nika Abashidze - Problem Solving, Algorithm Implementation.
+4. Misha Kakhniashvili - Bug Fixing, Documentation.
